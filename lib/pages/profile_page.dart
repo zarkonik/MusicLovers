@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_projects/auth/auth_service.dart';
 
-class Profile extends StatefulWidget {
+class Profile extends StatelessWidget {
   const Profile({super.key});
 
-  @override
-  State<Profile> createState() => _NearbyState();
-}
+  void logout() {
+    final _auth = AuthService();
+    _auth.signOut();
+  }
 
-class _NearbyState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -15,6 +16,9 @@ class _NearbyState extends State<Profile> {
         title: const Center(
           child: Text("Profile Page"),
         ),
+        actions: [
+          IconButton(onPressed: logout, icon: const Icon(Icons.logout))
+        ],
       ),
     );
   }

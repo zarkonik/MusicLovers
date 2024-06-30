@@ -1,5 +1,11 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter_projects/auth/auth_gate.dart';
+import 'package:flutter_projects/auth/login_or_register.dart';
+import 'package:flutter_projects/firebase_options.dart';
+
+import 'package:flutter_projects/pages/login_page.dart';
+import 'package:flutter_projects/pages/register_page.dart';
 import 'package:swipable_stack/swipable_stack.dart';
 
 import 'pages/chat_page.dart';
@@ -8,7 +14,10 @@ import 'pages/nearby.dart';
 import 'pages/encounters_page.dart';
 import 'pages/profile_page.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
   runApp(MyApp());
 }
 
@@ -22,9 +31,9 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: FirstPage(),
+      home: AuthGate(),
     );
   }
 }
@@ -39,7 +48,14 @@ class FirstPage extends StatefulWidget {
 class _FirstPageState extends State<FirstPage> {
   var currentIndex = 0;
 
-  final screens = [Nearby(), Encounters(), Likes(), Chat(), Profile()];
+  final screens = [
+    LoginPage(),
+    Nearby(),
+    Encounters(),
+    Likes(),
+    Chat(),
+    Profile()
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +63,7 @@ class _FirstPageState extends State<FirstPage> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
-        title: const Center(child: Text('Music Lovers')),
+        title: const Center(child: Text('MusicConnects')),
       ),
       backgroundColor: Colors.white,
       body: screens[currentIndex],
@@ -56,6 +72,10 @@ class _FirstPageState extends State<FirstPage> {
         currentIndex: currentIndex,
         onTap: (index) => setState(() => currentIndex = index),
         items: const [
+          BottomNavigationBarItem(
+            label: 'Login',
+            icon: Icon(Icons.login),
+          ),
           BottomNavigationBarItem(
             label: 'Nearby',
             icon: Icon(Icons.place),
